@@ -20,7 +20,7 @@ export enum Direction {
   RIGHT,
 }
 
-const MOVEMENT_SPEED = 1000;
+const MOVEMENT_SPEED = 50;
 
 interface UseGameLogicArgs {
   canvasWidth?: number;
