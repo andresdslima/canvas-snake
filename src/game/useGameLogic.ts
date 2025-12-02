@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { SEGMENT_SIZE } from '../draw/draw';
+import { getSegmentSize } from '../draw/draw';
 import randomPositionOnGrid from '../utils/randomPositionOnGrid';
 import useInterval from '../utils/useInterval';
 import { GameState } from './Game';
@@ -20,7 +20,10 @@ export enum Direction {
   RIGHT,
 }
 
-const MOVEMENT_SPEED = 50;
+const getMovementSpeed = () => {
+  const isMobile = window.innerWidth <= 768;
+  return isMobile ? 10 : 5;
+};
 
 interface UseGameLogicArgs {
   canvasWidth?: number;
@@ -49,11 +52,11 @@ const useGameLogic = ({
     setDirection(undefined);
     setFoodPosition({
       x: randomPositionOnGrid({
-        gridSize: SEGMENT_SIZE,
+        gridSize: getSegmentSize(),
         threshold: canvasWidth!,
       }),
       y: randomPositionOnGrid({
-        gridSize: SEGMENT_SIZE,
+        gridSize: getSegmentSize(),
         threshold: canvasHeight!,
       }),
     });
@@ -61,11 +64,11 @@ const useGameLogic = ({
     setSnakeBody([
       {
         x: randomPositionOnGrid({
-          gridSize: SEGMENT_SIZE,
+          gridSize: getSegmentSize(),
           threshold: canvasWidth!,
         }),
         y: randomPositionOnGrid({
-          gridSize: SEGMENT_SIZE,
+          gridSize: getSegmentSize(),
           threshold: canvasHeight!,
         }),
       },
@@ -83,11 +86,11 @@ const useGameLogic = ({
     }
     setFoodPosition({
       x: randomPositionOnGrid({
-        gridSize: SEGMENT_SIZE,
+        gridSize: getSegmentSize(),
         threshold: canvasWidth,
       }),
       y: randomPositionOnGrid({
-        gridSize: SEGMENT_SIZE,
+        gridSize: getSegmentSize(),
         threshold: canvasHeight,
       }),
     });
@@ -95,11 +98,11 @@ const useGameLogic = ({
     setSnakeBody([
       {
         x: randomPositionOnGrid({
-          gridSize: SEGMENT_SIZE,
+          gridSize: getSegmentSize(),
           threshold: canvasWidth,
         }),
         y: randomPositionOnGrid({
-          gridSize: SEGMENT_SIZE,
+          gridSize: getSegmentSize(),
           threshold: canvasHeight,
         }),
       },
@@ -147,7 +150,7 @@ const useGameLogic = ({
         }
         break;
       case Direction.DOWN:
-        if (canvasHeight && snakeHeadPosition.y < canvasHeight - SEGMENT_SIZE) {
+        if (canvasHeight && snakeHeadPosition.y < canvasHeight - getSegmentSize()) {
           snakeBodyAfterMovement = moveDown(snakeBody);
         } else {
           onGameOver();
@@ -165,7 +168,7 @@ const useGameLogic = ({
         }
         break;
       case Direction.RIGHT:
-        if (canvasWidth && snakeHeadPosition.x < canvasWidth - SEGMENT_SIZE) {
+        if (canvasWidth && snakeHeadPosition.x < canvasWidth - getSegmentSize()) {
           snakeBodyAfterMovement = moveRight(snakeBody);
         } else {
           onGameOver();
@@ -211,7 +214,7 @@ const useGameLogic = ({
 
   useInterval(
     moveSnake,
-    gameState === GameState.RUNNING ? MOVEMENT_SPEED : null
+    gameState === GameState.RUNNING ? getMovementSpeed() : null
   );
 
   return {

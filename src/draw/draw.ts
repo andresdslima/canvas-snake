@@ -6,18 +6,25 @@ interface DrawArgs {
   foodPosition?: Position;
 }
 
-export const SEGMENT_SIZE = 50;
+export const getSegmentSize = () => {
+  const isMobile = window.innerWidth <= 768;
+  return isMobile ? 20 : 30;
+};
 
 const draw = ({ ctx, snakeBody, foodPosition }: DrawArgs) => {
+  const segmentSize = getSegmentSize();
+  
   if (foodPosition) {
     ctx.fillStyle = 'rgb(200, 0, 0)';
-    ctx.fillRect(foodPosition?.x, foodPosition?.y, SEGMENT_SIZE, SEGMENT_SIZE);
+    ctx.fillRect(foodPosition?.x, foodPosition?.y, segmentSize, segmentSize);
   }
 
   ctx.fillStyle = 'rgb(0, 200, 0)';
   snakeBody.forEach((segment) =>
-    ctx.fillRect(segment.x, segment.y, SEGMENT_SIZE, SEGMENT_SIZE)
+    ctx.fillRect(segment.x, segment.y, segmentSize, segmentSize)
   );
 };
+
+export const SEGMENT_SIZE = getSegmentSize();
 
 export default draw;

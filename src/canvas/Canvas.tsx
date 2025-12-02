@@ -33,7 +33,7 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
     }
 
     return (
-      <S.Canvas width={window.innerWidth} height={window.innerHeight} ref={canvasRef as any} {...props} />
+      <S.Canvas width={props.width || window.innerWidth} height={props.height || window.innerHeight} ref={canvasRef as any} {...props} />
     );
   }
 );

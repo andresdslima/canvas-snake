@@ -23,9 +23,11 @@ const Game: React.FC<GameProps> = ({}) => {
 
   useEffect(() => {
     const updateCanvasSize = () => {
+      const isMobile = window.innerWidth <= 768;
+      const multiplier = isMobile ? 1 : 0.75;
       setCanvasSize({
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: window.innerWidth * multiplier,
+        height: window.innerHeight * multiplier
       });
     };
     
@@ -70,7 +72,7 @@ const Game: React.FC<GameProps> = ({}) => {
 
   return (
     <GameWrapper tabIndex={0} onKeyDown={onKeyDownHandler}>
-      <Canvas ref={canvasRef} draw={drawGame} />
+      <Canvas ref={canvasRef} draw={drawGame} width={canvasSize.width} height={canvasSize.height} />
       {gameState === GameState.GAME_OVER ? (
         <button
           onClick={() => {
