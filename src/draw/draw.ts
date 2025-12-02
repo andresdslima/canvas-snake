@@ -8,7 +8,7 @@ interface DrawArgs {
 
 export const getSegmentSize = () => {
   const isMobile = window.innerWidth <= 768;
-  return isMobile ? 20 : 30;
+  return isMobile ? 20 : 20;
 };
 
 const draw = ({ ctx, snakeBody, foodPosition }: DrawArgs) => {

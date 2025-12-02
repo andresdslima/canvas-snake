@@ -1,6 +1,9 @@
 import { Direction, Position } from './useGameLogic';
+import { getSegmentSize } from '../draw/draw';
 
-const createSnakeMovement = (gridSize = 5) => ({
+const createSnakeMovement = () => {
+  const gridSize = getSegmentSize();
+  return {
   moveRight: (snakeBody: Position[]) => {
     const bodyCopy = [...snakeBody];
     const headPos = bodyCopy[bodyCopy.length - 1];
@@ -25,7 +28,8 @@ const createSnakeMovement = (gridSize = 5) => ({
     bodyCopy.shift();
     return [...bodyCopy, { ...headPos, y: headPos.y - gridSize }];
   },
-});
+};
+};
 
 interface WillSnakeHitTheFoodArgs {
   foodPosition: Position;
@@ -33,34 +37,39 @@ interface WillSnakeHitTheFoodArgs {
   direction: Direction;
 }
 
+const checkRectangleOverlap = (rect1: Position, rect2: Position, size: number) => {
+  return (
+    rect1.x < rect2.x + size &&
+    rect1.x + size > rect2.x &&
+    rect1.y < rect2.y + size &&
+    rect1.y + size > rect2.y
+  );
+};
+
 export const willSnakeHitTheFood = ({
   foodPosition,
   snakeHeadPosition,
   direction,
 }: WillSnakeHitTheFoodArgs) => {
+  const segmentSize = getSegmentSize();
+  let nextHeadPosition: Position;
+  
   switch (direction) {
     case Direction.UP:
-      return (
-        foodPosition.x === snakeHeadPosition.x &&
-        snakeHeadPosition.y - 5 === foodPosition.y
-      );
+      nextHeadPosition = { x: snakeHeadPosition.x, y: snakeHeadPosition.y - segmentSize };
+      break;
     case Direction.DOWN:
-      return (
-        foodPosition.x === snakeHeadPosition.x &&
-        snakeHeadPosition.y + 5 === foodPosition.y
-      );
+      nextHeadPosition = { x: snakeHeadPosition.x, y: snakeHeadPosition.y + segmentSize };
+      break;
     case Direction.LEFT:
-      return (
-        foodPosition.y === snakeHeadPosition.y &&
-        snakeHeadPosition.x - 5 === foodPosition.x
-      );
-
+      nextHeadPosition = { x: snakeHeadPosition.x - segmentSize, y: snakeHeadPosition.y };
+      break;
     case Direction.RIGHT:
-      return (
-        foodPosition.y === snakeHeadPosition.y &&
-        snakeHeadPosition.x + 5 === foodPosition.x
-      );
+      nextHeadPosition = { x: snakeHeadPosition.x + segmentSize, y: snakeHeadPosition.y };
+      break;
   }
+  
+  return checkRectangleOverlap(nextHeadPosition, foodPosition, segmentSize);
 };
 
 export const hasSnakeEatenItself = (snakeBody: Position[]) => {
@@ -71,7 +80,8 @@ export const hasSnakeEatenItself = (snakeBody: Position[]) => {
   const head = snakeBody[snakeBody.length - 1];
   const body = snakeBody.slice(0, snakeBody.length - 1);
 
-  return body.some((segment) => segment.x === head.x && segment.y === head.y);
+  const segmentSize = getSegmentSize();
+  return body.some((segment) => checkRectangleOverlap(head, segment, segmentSize));
 };
 
 export default createSnakeMovement;
