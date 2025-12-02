@@ -15,8 +15,19 @@ export enum GameState {
 const Game: React.FC<GameProps> = ({}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameState, setGameState] = useState<GameState>(GameState.RUNNING);
+  const [maxScore, setMaxScore] = useState<number>(() => {
+    const saved = localStorage.getItem('snakeMaxScore');
+    return saved ? parseInt(saved, 10) : 0;
+  });
 
-  const onGameOver = () => setGameState(GameState.GAME_OVER);
+  const onGameOver = () => {
+    const currentScore = (snakeBody.length - 1) * 10;
+    if (currentScore > maxScore) {
+      setMaxScore(currentScore);
+      localStorage.setItem('snakeMaxScore', currentScore.toString());
+    }
+    setGameState(GameState.GAME_OVER);
+  };
 
   const toggleGameState = () => {
     setGameState(
@@ -65,6 +76,7 @@ const Game: React.FC<GameProps> = ({}) => {
         </button>
       )}
       <Score>{`Your score: ${(snakeBody.length - 1) * 10} `}</Score>
+      <Score>{`Max score: ${maxScore} `}</Score>
     </GameWrapper>
   );
 };
