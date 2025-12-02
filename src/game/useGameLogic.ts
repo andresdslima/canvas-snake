@@ -22,7 +22,7 @@ export enum Direction {
 
 const getMovementSpeed = () => {
   const isMobile = window.innerWidth <= 768;
-  return isMobile ? 20 : 20;
+  return isMobile ? 50 : 50;
 };
 
 interface UseGameLogicArgs {
