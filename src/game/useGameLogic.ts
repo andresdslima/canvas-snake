@@ -140,38 +140,33 @@ const useGameLogic = ({
       case Direction.UP:
         if (snakeHeadPosition.y > 0) {
           snakeBodyAfterMovement = moveUp(snakeBody);
-        } else if (canvasWidth && snakeHeadPosition.x > canvasWidth / 2) {
-          setDirection(Direction.LEFT);
         } else {
-          setDirection(Direction.RIGHT);
+          onGameOver();
+          return;
         }
         break;
       case Direction.DOWN:
         if (canvasHeight && snakeHeadPosition.y < canvasHeight - SEGMENT_SIZE) {
           snakeBodyAfterMovement = moveDown(snakeBody);
-        } else if (canvasWidth && snakeHeadPosition.x > canvasWidth / 2) {
-          setDirection(Direction.LEFT);
         } else {
-          setDirection(Direction.RIGHT);
+          onGameOver();
+          return;
         }
-
         break;
       case Direction.LEFT:
         if (snakeHeadPosition.x > 0) {
           snakeBodyAfterMovement = moveLeft(snakeBody);
-        } else if (canvasHeight && snakeHeadPosition.y < canvasHeight / 2) {
-          setDirection(Direction.DOWN);
         } else {
-          setDirection(Direction.UP);
+          onGameOver();
+          return;
         }
         break;
       case Direction.RIGHT:
         if (canvasWidth && snakeHeadPosition.x < canvasWidth - SEGMENT_SIZE) {
           snakeBodyAfterMovement = moveRight(snakeBody);
-        } else if (canvasHeight && snakeHeadPosition.y < canvasHeight / 2) {
-          setDirection(Direction.DOWN);
         } else {
-          setDirection(Direction.UP);
+          onGameOver();
+          return;
         }
         break;
     }
