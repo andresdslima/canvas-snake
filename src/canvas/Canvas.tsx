@@ -25,7 +25,7 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
       }
 
       draw(context);
-      return () => context.clearRect(0, 0, window.innerWidth, 400);
+      return () => context.clearRect(0, 0, window.innerWidth, window.innerHeight);
     }, [draw, canvasRef]);
 
     if (!canvasRef) {
@@ -33,7 +33,7 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
     }
 
     return (
-      <S.Canvas width={300} height={150} ref={canvasRef as any} {...props} />
+      <S.Canvas width={window.innerWidth} height={window.innerHeight} ref={canvasRef as any} {...props} />
     );
   }
 );

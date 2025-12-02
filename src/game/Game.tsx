@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Canvas from '../canvas/Canvas';
 import draw from '../draw/draw';
 import { GameWrapper, Score } from './Game.styles';
@@ -14,11 +14,25 @@ export enum GameState {
 
 const Game: React.FC<GameProps> = ({}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [gameState, setGameState] = useState<GameState>(GameState.RUNNING);
+  const [gameState, setGameState] = useState<GameState>(GameState.PAUSED);
   const [maxScore, setMaxScore] = useState<number>(() => {
     const saved = localStorage.getItem('snakeMaxScore');
     return saved ? parseInt(saved, 10) : 0;
   });
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const updateCanvasSize = () => {
+      setCanvasSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+    return () => window.removeEventListener('resize', updateCanvasSize);
+  }, []);
 
   const onGameOver = () => {
     const currentScore = (snakeBody.length - 1) * 10;
@@ -39,8 +53,8 @@ const Game: React.FC<GameProps> = ({}) => {
 
   const { snakeBody, onKeyDownHandler, foodPosition, resetGameState } =
     useGameLogic({
-      canvasHeight: 150,
-      canvasWidth: 300,
+      canvasHeight: canvasSize.height,
+      canvasWidth: canvasSize.width,
       onGameOver,
       gameState,
       onToggleGameState: toggleGameState,
@@ -49,6 +63,10 @@ const Game: React.FC<GameProps> = ({}) => {
   const drawGame = (ctx: CanvasRenderingContext2D) => {
     draw({ ctx, snakeBody, foodPosition });
   };
+
+  if (canvasSize.width === 0 || canvasSize.height === 0) {
+    return null;
+  }
 
   return (
     <GameWrapper tabIndex={0} onKeyDown={onKeyDownHandler}>
@@ -75,8 +93,8 @@ const Game: React.FC<GameProps> = ({}) => {
           {gameState === GameState.RUNNING ? 'pause' : 'play'}
         </button>
       )}
-      <Score>{`Your score: ${(snakeBody.length - 1) * 10} `}</Score>
-      <Score>{`Max score: ${maxScore} `}</Score>
+      <Score style={{ top: '20px' }}>{`Your score: ${(snakeBody.length - 1) * 10} `}</Score>
+      <Score style={{ top: '60px' }}>{`Max score: ${maxScore} `}</Score>
     </GameWrapper>
   );
 };

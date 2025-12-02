@@ -20,7 +20,7 @@ export enum Direction {
   RIGHT,
 }
 
-const MOVEMENT_SPEED = 50;
+const MOVEMENT_SPEED = 75;
 
 interface UseGameLogicArgs {
   canvasWidth?: number;
@@ -142,6 +142,7 @@ const useGameLogic = ({
           snakeBodyAfterMovement = moveUp(snakeBody);
         } else {
           onGameOver();
+          resetGameState();
           return;
         }
         break;
@@ -150,6 +151,7 @@ const useGameLogic = ({
           snakeBodyAfterMovement = moveDown(snakeBody);
         } else {
           onGameOver();
+          resetGameState();
           return;
         }
         break;
@@ -158,6 +160,7 @@ const useGameLogic = ({
           snakeBodyAfterMovement = moveLeft(snakeBody);
         } else {
           onGameOver();
+          resetGameState();
           return;
         }
         break;
@@ -166,6 +169,7 @@ const useGameLogic = ({
           snakeBodyAfterMovement = moveRight(snakeBody);
         } else {
           onGameOver();
+          resetGameState();
           return;
         }
         break;
@@ -176,6 +180,7 @@ const useGameLogic = ({
       const isGameOver = hasSnakeEatenItself(snakeBodyAfterMovement);
       if (isGameOver) {
         onGameOver();
+        resetGameState();
       }
     }
 
