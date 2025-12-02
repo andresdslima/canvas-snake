@@ -20,13 +20,14 @@ export enum Direction {
   RIGHT,
 }
 
-const MOVEMENT_SPEED = 200;
+const MOVEMENT_SPEED = 1000;
 
 interface UseGameLogicArgs {
   canvasWidth?: number;
   canvasHeight?: number;
   onGameOver: () => void;
   gameState: GameState;
+  onToggleGameState: () => void;
 }
 
 const useGameLogic = ({
@@ -34,6 +35,7 @@ const useGameLogic = ({
   canvasWidth,
   onGameOver,
   gameState,
+  onToggleGameState,
 }: UseGameLogicArgs) => {
   const [direction, setDirection] = useState<Direction | undefined>();
   const [snakeBody, setSnakeBody] = useState<Position[]>([
@@ -125,6 +127,9 @@ const useGameLogic = ({
         if (direction !== Direction.RIGHT) {
           setDirection(Direction.LEFT);
         }
+        break;
+      case 'Enter':
+        onToggleGameState();
         break;
     }
   };

@@ -18,12 +18,21 @@ const Game: React.FC<GameProps> = ({}) => {
 
   const onGameOver = () => setGameState(GameState.GAME_OVER);
 
+  const toggleGameState = () => {
+    setGameState(
+      gameState === GameState.RUNNING
+        ? GameState.PAUSED
+        : GameState.RUNNING
+    );
+  };
+
   const { snakeBody, onKeyDownHandler, foodPosition, resetGameState } =
     useGameLogic({
       canvasHeight: 150,
       canvasWidth: 300,
       onGameOver,
       gameState,
+      onToggleGameState: toggleGameState,
     });
 
   const drawGame = (ctx: CanvasRenderingContext2D) => {
