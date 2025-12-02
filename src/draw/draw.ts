@@ -6,7 +6,7 @@ interface DrawArgs {
   foodPosition?: Position;
 }
 
-export const SEGMENT_SIZE = 5;
+export const SEGMENT_SIZE = 50;
 
 const draw = ({ ctx, snakeBody, foodPosition }: DrawArgs) => {
   if (foodPosition) {
