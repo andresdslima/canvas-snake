@@ -96,8 +96,7 @@ const Game: React.FC<GameProps> = ({}) => {
         </button>
       )}
       <Score style={{ top: '20px' }}>{`Your score: ${(snakeBody.length - 1) * 10}`}</Score>
-      <Score style={{ top: '60px' }}>{`Max score: ${maxScore}`}</Score>
-      <Score style={{ top: '100px' }}>Instructions: press Enter and use W, S, D, A key to move</Score>
+      <Score style={{ top: '60px' }}>{`Max score: ${maxScore} / Instructions: press Enter and use W, S, D, A to move`}</Score>
     </GameWrapper>
   );
 };
